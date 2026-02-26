@@ -20,12 +20,20 @@ export function AudioToggle() {
   );
 }
 
-export function speakText(text: string) {
+export function speakText(text: string, lang?: string) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'pt-BR';
+    utterance.lang = lang || 'pt-BR';
     utterance.rate = 0.8;
+
+    // Prefer local (offline-capable) voices
+    const voices = window.speechSynthesis.getVoices();
+    const targetLang = utterance.lang.split('-')[0];
+    const localVoice = voices.find(v => !v.localService === false && v.lang.startsWith(targetLang))
+      || voices.find(v => v.lang.startsWith(targetLang));
+    if (localVoice) utterance.voice = localVoice;
+
     window.speechSynthesis.speak(utterance);
   }
 }

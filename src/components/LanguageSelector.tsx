@@ -45,11 +45,13 @@ export function LanguageSelector() {
               exit={{ opacity: 0 }}
               onClick={() => setOpen(false)}
             />
-            {/* Bottom sheet */}
+            {/* Centered modal */}
             <motion.div
-              className="fixed top-1/2 left-1/2 z-[70] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-border/50 p-6"
+              className="fixed top-1/2 left-1/2 z-[70] w-[calc(100%-2rem)] max-w-md rounded-3xl border border-border/50 p-6"
               style={{
                 background: 'hsl(var(--card))',
+                x: '-50%',
+                y: '-50%',
               }}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
