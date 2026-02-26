@@ -54,7 +54,7 @@ export default function Result() {
   const dur = prefersReduced ? 0 : 1.2;
 
   return (
-    <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
+    <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 pt-8 pb-24">
       <div className="w-full max-w-md flex flex-col items-center gap-6">
         {result.level === 'high' && (
           <motion.div className="w-full glass-card border-2 border-danger/50 p-5 text-center animate-pulse-ring" initial={prefersReduced ? false : { opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>

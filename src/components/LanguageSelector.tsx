@@ -47,16 +47,15 @@ export function LanguageSelector() {
             />
             {/* Bottom sheet */}
             <motion.div
-              className="fixed bottom-0 left-1/2 z-[70] w-full max-w-md -translate-x-1/2 rounded-t-3xl border-t border-border/50 p-6 pb-8"
+              className="fixed top-1/2 left-1/2 z-[70] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-border/50 p-6"
               style={{
                 background: 'hsl(var(--card))',
               }}
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             >
-              <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted" />
               <h2 className="text-center text-lg font-bold text-foreground mb-5">
                 🌐 Idioma / Language / Idioma
               </h2>

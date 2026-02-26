@@ -27,7 +27,7 @@ export default function HistoryDetail() {
   const badge = levelBadge[session.result.level as keyof typeof levelBadge] || levelBadge.low;
 
   return (
-    <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
+    <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 pt-8 pb-24">
       <div className="w-full max-w-md flex flex-col gap-6">
         <PageHeader
           title={t('history.detailTitle')}
