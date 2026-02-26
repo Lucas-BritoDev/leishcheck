@@ -206,3 +206,16 @@
     animation: none;
   }
 }
+
+/* Reposition VLibras to bottom-right above audio button */
+div[vw],
+div[vw].enabled {
+  position: fixed !important;
+  bottom: 5rem !important;
+  right: 1rem !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: 49 !important;
+  width: auto !important;
+  height: auto !important;
+}
