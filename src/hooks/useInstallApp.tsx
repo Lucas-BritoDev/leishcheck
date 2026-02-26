@@ -45,8 +45,14 @@ export function useInstallApp() {
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
-  const handleInstallClick = () => {
-    setShowModal(true);
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      // Trigger native install directly
+      await triggerNativeInstall();
+    } else {
+      // Show modal for fallback/iOS 
+      setShowModal(true);
+    }
   };
 
   const triggerNativeInstall = async () => {
@@ -92,10 +98,16 @@ export function InstallAppModal({
             className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 z-[101] w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border border-border/50 bg-card p-6 shadow-2xl"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="fixed top-1/2 left-1/2 z-[101] w-[calc(100%-2rem)] max-w-md rounded-3xl border border-border/50 p-6 shadow-2xl"
+            style={{
+              background: 'hsl(var(--card))',
+              x: '-50%',
+              y: '-50%',
+            }}
           >
             <button
               onClick={onClose}
@@ -115,11 +127,11 @@ export function InstallAppModal({
             </div>
 
             <div className="space-y-4">
-              {/* Native Install Button if Available */}
+              {/* Native Install Fallback Message (Rare) */}
               {hasNativePrompt && (
                 <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-center">
                   <p className="mb-4 text-sm font-medium text-foreground">
-                    Seu navegador suporta instalação direta!
+                    Instale diretamente pelo navegador.
                   </p>
                   <Button onClick={onNativeInstall} className="w-full gap-2">
                     <Download className="h-4 w-4" /> Instalar Agora
