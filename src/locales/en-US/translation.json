@@ -41,7 +41,8 @@
     "statePlaceholder": "Select a state"
   },
   "questionnaire": {
-    "questionOf": "questions",
+    "title": "Questionnaire",
+    "questionOf": "{{current}} of {{total}} questions",
     "q1": "Do you live in a rural or forested area?",
     "q2": "Have you traveled to areas with leishmaniasis cases?",
     "q3": "Do you have a skin lesion that won't heal?",

@@ -41,7 +41,8 @@
     "statePlaceholder": "Selecione o estado"
   },
   "questionnaire": {
-    "questionOf": "perguntas",
+    "title": "Questionário",
+    "questionOf": "{{current}} de {{total}} perguntas",
     "q1": "Você mora em área rural ou de mata?",
     "q2": "Já viajou para locais com casos de leishmaniose?",
     "q3": "Possui lesão na pele que não cicatriza?",
