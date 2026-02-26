@@ -31,13 +31,13 @@ export default function Home() {
   return (
     <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center justify-center px-6">
       <motion.div className="flex flex-col items-center gap-10 text-center max-w-sm" variants={container} initial="hidden" animate="show">
-        <motion.div variants={item} className="flex h-28 w-28 items-center justify-center rounded-3xl overflow-hidden glow-green">
+        <motion.div variants={item} className="flex h-28 w-28 items-center justify-center rounded-3xl overflow-hidden animate-glow-pulse">
           <img src={logoLeishCheck} alt="Logo LeishCheck" className="h-full w-full object-cover" />
         </motion.div>
 
         <motion.div variants={item} className="flex flex-col items-center gap-2">
           <h1 className="text-4xl font-bold text-gradient">{t('app.name')}</h1>
-          <span className="inline-block rounded-full bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary">{t('app.version')}</span>
+          <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary shadow-sm">{t('app.version')}</span>
           <p className="mt-2 text-base tracking-wide text-muted-foreground whitespace-pre-line">{t('app.tagline')}</p>
         </motion.div>
 

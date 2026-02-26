@@ -45,9 +45,9 @@ export default function Result() {
   if (!result) { navigate('/'); return null; }
 
   const colorMap = {
-    low: { stroke: 'hsl(152 56% 34%)', text: 'text-success', glow: '0 0 30px hsl(152 56% 34% / 0.3)' },
-    medium: { stroke: 'hsl(42 96% 56%)', text: 'text-warning', glow: '0 0 30px hsl(42 96% 56% / 0.3)' },
-    high: { stroke: 'hsl(0 72% 50%)', text: 'text-danger', glow: '0 0 30px hsl(0 72% 50% / 0.3)' },
+    low: { stroke: 'hsl(152 56% 34%)', text: 'text-success', glow: '0 0 40px hsl(152 56% 34% / 0.5), 0 0 80px hsl(152 56% 34% / 0.2)' },
+    medium: { stroke: 'hsl(42 96% 56%)', text: 'text-warning', glow: '0 0 40px hsl(42 96% 56% / 0.5), 0 0 80px hsl(42 96% 56% / 0.2)' },
+    high: { stroke: 'hsl(0 72% 50%)', text: 'text-danger', glow: '0 0 40px hsl(0 72% 50% / 0.5), 0 0 80px hsl(0 72% 50% / 0.2)' },
   };
   const colors = colorMap[result.level];
   const strokeDashoffset = CIRCUMFERENCE - (result.percentage / 100) * CIRCUMFERENCE;

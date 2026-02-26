@@ -64,7 +64,7 @@ export default function Questionnaire() {
         </div>
 
         <AnimatePresence mode="wait">
-          <motion.div key={currentQuestion} initial={prefersReduced ? false : { opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={prefersReduced ? undefined : { opacity: 0, x: -30 }} transition={{ duration: dur }} className="glass-card flex flex-col items-center gap-6 p-8 text-center">
+          <motion.div key={currentQuestion} initial={prefersReduced ? false : { opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={prefersReduced ? undefined : { opacity: 0, x: -30 }} transition={{ duration: dur }} className="glass-card flex flex-col items-center gap-6 p-8 text-center border border-primary/20 shadow-xl" style={{ boxShadow: '0 12px 40px -8px hsl(152 56% 34% / 0.15)' }}>
             <div className="icon-circle h-16 w-16"><span className="text-3xl" role="img" aria-hidden="true">{q.icon}</span></div>
             <p className="text-xl font-semibold leading-relaxed text-card-foreground">{questionText}</p>
           </motion.div>

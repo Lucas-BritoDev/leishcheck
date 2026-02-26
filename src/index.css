@@ -190,6 +190,14 @@
   .animate-pulse-ring {
     animation: pulse-ring 2s ease-in-out infinite;
   }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px hsl(152 56% 34% / 0.25), 0 0 40px hsl(152 56% 34% / 0.1); }
+    50% { box-shadow: 0 0 30px hsl(152 56% 34% / 0.45), 0 0 60px hsl(152 56% 34% / 0.2); }
+  }
+  .animate-glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
