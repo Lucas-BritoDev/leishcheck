@@ -3,14 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getSessionById } from '@/lib/db';
 import { questions } from '@/data/questions';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, FileDown } from 'lucide-react';
+import { ArrowLeft, FileDown, Check, X } from 'lucide-react';
 import AnimatedPage from '@/components/AnimatedPage';
 import type { DbSession } from '@/lib/db';
 
-const levelColors = {
-  low: 'text-success',
-  medium: 'text-warning',
-  high: 'text-danger',
+const levelBadge = {
+  low: 'bg-success/15 text-success border-success/30',
+  medium: 'bg-warning/15 text-warning border-warning/30',
+  high: 'bg-danger/15 text-danger border-danger/30',
 };
 
 export default function HistoryDetail() {
@@ -29,7 +29,7 @@ export default function HistoryDetail() {
 
   if (loading) {
     return (
-      <AnimatedPage className="flex min-h-screen items-center justify-center">
+      <AnimatedPage className="gradient-bg flex min-h-screen items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </AnimatedPage>
     );
@@ -37,7 +37,7 @@ export default function HistoryDetail() {
 
   if (!session) {
     return (
-      <AnimatedPage className="flex min-h-screen flex-col items-center justify-center px-4 gap-4">
+      <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center justify-center px-4 gap-4">
         <p className="text-lg text-muted-foreground">Triagem não encontrada</p>
         <Button onClick={() => navigate('/historico')} variant="outline" className="rounded-2xl">Voltar</Button>
       </AnimatedPage>
@@ -45,15 +45,15 @@ export default function HistoryDetail() {
   }
 
   const date = new Date(session.date);
-  const color = levelColors[session.result.level as keyof typeof levelColors] || 'text-foreground';
+  const badge = levelBadge[session.result.level as keyof typeof levelBadge] || levelBadge.low;
 
   return (
-    <AnimatedPage className="flex min-h-screen flex-col items-center px-4 py-8">
+    <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
       <div className="w-full max-w-md flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/historico')}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-muted"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-muted/80 hover-lift"
             aria-label="Voltar"
           >
             <ArrowLeft className="h-5 w-5" />
@@ -66,43 +66,51 @@ export default function HistoryDetail() {
           </div>
         </div>
 
-        {/* Result summary */}
-        <div className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm">
+        {/* Result summary with badge */}
+        <div className="glass-card flex items-center gap-4 p-5">
           <div className="flex flex-col items-center">
-            <span className={`text-3xl font-bold ${color}`}>{session.result.percentage}%</span>
+            <span className={`text-3xl font-bold ${levelBadge[session.result.level as keyof typeof levelBadge]?.split(' ')[1] || 'text-foreground'}`}>
+              {session.result.percentage}%
+            </span>
             <span className="text-xs text-muted-foreground">de risco</span>
           </div>
           <div className="flex-1">
-            <p className={`text-lg font-bold ${color}`}>{session.result.title}</p>
+            <div className="flex items-center gap-2 mb-1">
+              <span className={`inline-block rounded-full border px-3 py-0.5 text-xs font-semibold ${badge}`}>
+                {session.result.title}
+              </span>
+            </div>
             <p className="text-sm text-muted-foreground">{session.result.orientation}</p>
           </div>
         </div>
 
         {/* User data */}
         {session.userData && (session.userData.age || session.userData.gender || session.userData.city) && (
-          <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+          <div className="glass-card p-4">
             <h2 className="text-sm font-bold text-foreground mb-2">Dados do Paciente</h2>
-            <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-              {session.userData.age && <span>Idade: {session.userData.age}</span>}
-              {session.userData.gender && <span>Gênero: {session.userData.gender}</span>}
-              {session.userData.city && <span>Cidade: {session.userData.city}</span>}
-              {session.userData.state && <span>Estado: {session.userData.state}</span>}
+            <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+              {session.userData.age && <span className="rounded-full bg-muted px-3 py-1">Idade: {session.userData.age}</span>}
+              {session.userData.gender && <span className="rounded-full bg-muted px-3 py-1">Gênero: {session.userData.gender}</span>}
+              {session.userData.city && <span className="rounded-full bg-muted px-3 py-1">{session.userData.city}</span>}
+              {session.userData.state && <span className="rounded-full bg-muted px-3 py-1">{session.userData.state}</span>}
             </div>
           </div>
         )}
 
-        {/* Answers */}
-        <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+        {/* Answers with zebra */}
+        <div className="glass-card p-4">
           <h2 className="text-sm font-bold text-foreground mb-3">Respostas</h2>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             {questions.map((q, i) => {
               const answer = session.answers.find(a => a.questionIndex === i);
               const answered = answer?.answer;
               return (
-                <div key={i} className="flex items-start gap-3 py-2 border-b border-border last:border-0">
-                  <span className="text-lg mt-0.5">{q.icon}</span>
+                <div key={i} className={`flex items-center gap-3 py-3 px-2 rounded-lg ${i % 2 === 0 ? 'bg-muted/30' : ''}`}>
+                  <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${answered ? 'bg-success/15 text-success' : 'bg-danger/15 text-danger'}`}>
+                    {answered ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                  </div>
                   <p className="flex-1 text-sm text-card-foreground">{q.text}</p>
-                  <span className={`text-sm font-semibold ${answered ? 'text-success' : 'text-danger'}`}>
+                  <span className={`text-xs font-semibold ${answered ? 'text-success' : 'text-danger'}`}>
                     {answered ? 'Sim' : 'Não'}
                   </span>
                 </div>
@@ -119,9 +127,9 @@ export default function HistoryDetail() {
             });
           }}
           variant="outline"
-          className="h-14 w-full rounded-2xl text-lg font-semibold"
+          className="glass-card h-14 w-full rounded-2xl text-lg font-semibold hover-lift"
         >
-          <FileDown className="mr-2 h-5 w-5" /> 📄 Baixar PDF
+          <FileDown className="mr-2 h-5 w-5" /> Baixar PDF
         </Button>
       </div>
     </AnimatedPage>

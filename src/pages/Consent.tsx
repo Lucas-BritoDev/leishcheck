@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLeishCheckStore } from '@/store/useLeishCheckStore';
 import { speakText } from '@/components/AudioToggle';
-import { Shield } from 'lucide-react';
+import { Shield, ChevronDown, HeartHandshake } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import AnimatedPage from '@/components/AnimatedPage';
@@ -70,22 +70,22 @@ export default function Consent() {
 
   if (showDeclineMessage) {
     return (
-      <AnimatedPage className="flex min-h-screen flex-col items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md flex flex-col items-center gap-6 rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-            <Shield className="h-8 w-8 text-muted-foreground" />
+      <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center justify-center px-4 py-8">
+        <div className="glass-card w-full max-w-md flex flex-col items-center gap-6 p-8 text-center">
+          <div className="icon-circle h-20 w-20">
+            <HeartHandshake className="h-10 w-10 text-primary" />
           </div>
           <h2 className="text-xl font-bold text-foreground">Entendemos sua decisão</h2>
           <p className="text-base leading-relaxed text-muted-foreground">
             Sem o consentimento, não é possível realizar a triagem. Você pode voltar quando quiser.
           </p>
           <div className="flex w-full flex-col gap-3">
-            <Button
+            <button
               onClick={() => navigate('/')}
-              className="h-14 w-full rounded-2xl text-lg font-semibold"
+              className="gradient-btn h-14 w-full rounded-2xl text-lg font-semibold"
             >
               Voltar ao Início
-            </Button>
+            </button>
             <Button
               onClick={() => setShowDeclineMessage(false)}
               variant="ghost"
@@ -100,11 +100,11 @@ export default function Consent() {
   }
 
   return (
-    <AnimatedPage className="flex min-h-screen flex-col items-center px-4 py-8">
+    <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
       <div className="w-full max-w-md flex flex-col gap-6">
         <div className="flex flex-col items-center gap-3">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-trust">
-            <Shield className="h-8 w-8 text-trust-foreground" />
+          <div className="icon-circle-blue h-16 w-16">
+            <Shield className="h-8 w-8 text-trust" />
           </div>
           <h1 className="text-2xl font-bold text-foreground">Sua privacidade é importante</h1>
         </div>
@@ -112,18 +112,19 @@ export default function Consent() {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="h-64 overflow-y-auto rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-card-foreground"
+          className="glass-card h-64 overflow-y-auto p-5 text-sm leading-relaxed text-card-foreground"
         >
           <pre className="whitespace-pre-wrap font-sans">{CONSENT_TEXT}</pre>
         </div>
 
         {!scrolledToEnd && (
-          <p className="text-center text-xs text-muted-foreground">
-            ↓ Role até o final para continuar
-          </p>
+          <div className="flex flex-col items-center gap-1 text-muted-foreground">
+            <p className="text-xs">Role até o final para continuar</p>
+            <ChevronDown className="h-5 w-5 animate-bounce-down" />
+          </div>
         )}
 
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 glass-card p-4">
           <Checkbox
             id="consent"
             checked={agreed}
@@ -132,19 +133,19 @@ export default function Consent() {
             className="mt-0.5 h-6 w-6"
             aria-label="Li e concordo com o termo de consentimento"
           />
-          <label htmlFor="consent" className={`text-sm ${scrolledToEnd ? 'text-foreground' : 'text-muted-foreground'}`}>
+          <label htmlFor="consent" className={`text-sm font-medium ${scrolledToEnd ? 'text-foreground' : 'text-muted-foreground'}`}>
             Li e concordo com o termo de consentimento
           </label>
         </div>
 
         <div className="flex flex-col gap-3">
-          <Button
+          <button
             onClick={handleAccept}
             disabled={!agreed}
-            className="h-14 w-full rounded-2xl text-lg font-semibold"
+            className="gradient-btn h-14 w-full rounded-2xl text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
           >
             Aceitar e Continuar
-          </Button>
+          </button>
           <Button
             onClick={handleDecline}
             variant="ghost"
@@ -154,9 +155,10 @@ export default function Consent() {
           </Button>
         </div>
 
-        <p className="text-center text-xs text-muted-foreground">
-          ⚠️ Esta ferramenta não substitui consulta médica presencial.
-        </p>
+        <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+          <Shield className="h-4 w-4" />
+          <p>Esta ferramenta não substitui consulta médica presencial.</p>
+        </div>
       </div>
     </AnimatedPage>
   );

@@ -7,10 +7,15 @@ export function AudioToggle() {
   return (
     <button
       onClick={toggleAudio}
-      className="fixed top-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 active:scale-95"
+      className="fixed top-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all hover:scale-110 active:scale-95 border border-border/50"
+      style={{
+        background: 'hsl(var(--card) / 0.85)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+      }}
       aria-label={audioEnabled ? 'Desativar modo áudio' : 'Ativar modo áudio'}
     >
-      {audioEnabled ? <Volume2 className="h-6 w-6" /> : <VolumeX className="h-6 w-6" />}
+      {audioEnabled ? <Volume2 className="h-6 w-6 text-primary" /> : <VolumeX className="h-6 w-6 text-muted-foreground" />}
     </button>
   );
 }

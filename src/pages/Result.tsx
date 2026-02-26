@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLeishCheckStore } from '@/store/useLeishCheckStore';
 import { speakText } from '@/components/AudioToggle';
 import { Button } from '@/components/ui/button';
-import { MapPin, BookOpen, RotateCcw, AlertTriangle, FileDown } from 'lucide-react';
+import { MapPin, BookOpen, RotateCcw, AlertTriangle, FileDown, ShieldCheck } from 'lucide-react';
 import AnimatedPage from '@/components/AnimatedPage';
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -12,6 +12,7 @@ const CIRCLE_RADIUS = 70;
 const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
 
 export default function Result() {
+  const navigate = useNavigate();
   const { result, resetTriagem, audioEnabled, answers, userData } = useLeishCheckStore();
   const [displayPercent, setDisplayPercent] = useState(0);
   const prefersReduced = useReducedMotion();
@@ -31,7 +32,6 @@ export default function Result() {
     const target = result.percentage;
     const duration = 1200;
     const startTime = performance.now();
-
     const animate = (now: number) => {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
@@ -48,9 +48,9 @@ export default function Result() {
   }
 
   const colorMap = {
-    low: { stroke: 'hsl(var(--success))', text: 'text-success', bg: 'bg-success/10' },
-    medium: { stroke: 'hsl(var(--warning))', text: 'text-warning', bg: 'bg-warning/10' },
-    high: { stroke: 'hsl(var(--danger))', text: 'text-danger', bg: 'bg-danger/10' },
+    low: { stroke: 'hsl(152 56% 34%)', text: 'text-success', bg: 'bg-success/10', glow: '0 0 30px hsl(152 56% 34% / 0.3)' },
+    medium: { stroke: 'hsl(42 96% 56%)', text: 'text-warning', bg: 'bg-warning/10', glow: '0 0 30px hsl(42 96% 56% / 0.3)' },
+    high: { stroke: 'hsl(0 72% 50%)', text: 'text-danger', bg: 'bg-danger/10', glow: '0 0 30px hsl(0 72% 50% / 0.3)' },
   };
   const colors = colorMap[result.level];
   const strokeDashoffset = CIRCUMFERENCE - (result.percentage / 100) * CIRCUMFERENCE;
@@ -62,12 +62,12 @@ export default function Result() {
   };
 
   return (
-    <AnimatedPage className="flex min-h-screen flex-col items-center px-4 py-8">
+    <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
       <div className="w-full max-w-md flex flex-col items-center gap-6">
-        {/* Emergency alert for high risk */}
+        {/* Emergency alert */}
         {result.level === 'high' && (
           <motion.div
-            className="w-full rounded-2xl border-2 border-danger bg-danger/10 p-5 text-center"
+            className="w-full glass-card border-2 border-danger/50 p-5 text-center animate-pulse-ring"
             initial={prefersReduced ? false : { opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: dur * 0.3 }}
@@ -77,18 +77,18 @@ export default function Result() {
               <span className="text-lg font-bold text-danger">ATENÇÃO</span>
             </div>
             <p className="text-sm font-medium leading-relaxed text-danger">
-              🚨 Seus sinais são fortemente sugestivos. Procure uma Unidade Básica de Saúde (UBS) urgentemente. O tratamento é gratuito pelo SUS.
+              Seus sinais são fortemente sugestivos. Procure uma Unidade Básica de Saúde (UBS) urgentemente. O tratamento é gratuito pelo SUS.
             </p>
           </motion.div>
         )}
 
-        {/* Animated Score Circle */}
-        <div className="relative flex items-center justify-center">
+        {/* Score Circle with glow */}
+        <div className="relative flex items-center justify-center" style={{ filter: `drop-shadow(${colors.glow})` }}>
           <svg width="180" height="180" viewBox="0 0 180 180">
-            <circle cx="90" cy="90" r={CIRCLE_RADIUS} fill="none" stroke="hsl(var(--muted))" strokeWidth="12" />
+            <circle cx="90" cy="90" r={CIRCLE_RADIUS} fill="none" stroke="hsl(var(--muted))" strokeWidth="10" />
             <motion.circle
               cx="90" cy="90" r={CIRCLE_RADIUS} fill="none"
-              stroke={colors.stroke} strokeWidth="12" strokeLinecap="round"
+              stroke={colors.stroke} strokeWidth="10" strokeLinecap="round"
               strokeDasharray={CIRCUMFERENCE}
               initial={{ strokeDashoffset: CIRCUMFERENCE }}
               animate={{ strokeDashoffset }}
@@ -112,13 +112,13 @@ export default function Result() {
         </motion.h1>
 
         <motion.div
-          className="rounded-2xl border border-border bg-card p-6 text-center shadow-sm"
+          className="glass-card p-6 text-center w-full"
           initial={prefersReduced ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: prefersReduced ? 0 : 1.0 }}
         >
           <p className="text-base leading-relaxed text-card-foreground">{result.description}</p>
-          <hr className="my-4 border-border" />
+          <hr className="my-4 border-border/50" />
           <p className="text-sm leading-relaxed text-muted-foreground">{result.orientation}</p>
         </motion.div>
 
@@ -128,20 +128,20 @@ export default function Result() {
           animate={{ opacity: 1 }}
           transition={{ delay: prefersReduced ? 0 : 1.2 }}
         >
-          <Button
+          <button
             onClick={() => window.open('https://www.google.com/maps/search/UBS+perto+de+mim', '_blank')}
-            className="h-14 w-full rounded-2xl text-lg font-semibold"
+            className="gradient-btn flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-lg font-semibold"
             aria-label="Ver unidade básica de saúde mais próxima"
           >
-            <MapPin className="mr-2 h-5 w-5" /> 📍 Ver UBS mais próxima
-          </Button>
+            <MapPin className="h-5 w-5" /> Ver UBS mais próxima
+          </button>
           <Button
             onClick={() => navigate('/educacao')}
             variant="secondary"
-            className="h-14 w-full rounded-2xl text-lg font-semibold"
+            className="glass-card h-14 w-full rounded-2xl text-lg font-semibold hover-lift"
             aria-label="Acessar material educativo"
           >
-            <BookOpen className="mr-2 h-5 w-5" /> 📚 Saiba mais
+            <BookOpen className="mr-2 h-5 w-5" /> Saiba mais
           </Button>
           <Button
             onClick={() => {
@@ -150,10 +150,10 @@ export default function Result() {
               });
             }}
             variant="outline"
-            className="h-14 w-full rounded-2xl text-lg font-semibold"
+            className="glass-card h-14 w-full rounded-2xl text-lg font-semibold hover-lift"
             aria-label="Baixar resultado em PDF"
           >
-            <FileDown className="mr-2 h-5 w-5" /> 📄 Baixar PDF
+            <FileDown className="mr-2 h-5 w-5" /> Baixar PDF
           </Button>
           <Button
             onClick={handleRetry}
@@ -161,18 +161,19 @@ export default function Result() {
             className="h-12 w-full rounded-2xl text-muted-foreground"
             aria-label="Refazer triagem"
           >
-            <RotateCcw className="mr-2 h-4 w-4" /> 🔄 Refazer Triagem
+            <RotateCcw className="mr-2 h-4 w-4" /> Refazer Triagem
           </Button>
         </motion.div>
 
         <motion.div
-          className="rounded-xl bg-warning/10 p-4 text-center"
+          className="glass-card flex items-center gap-3 p-4 w-full"
           initial={prefersReduced ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: prefersReduced ? 0 : 1.4 }}
         >
-          <p className="text-sm font-medium text-warning-foreground">
-            ⚠️ Apenas um profissional de saúde pode confirmar o diagnóstico.
+          <ShieldCheck className="h-5 w-5 text-warning shrink-0" />
+          <p className="text-sm font-medium text-muted-foreground">
+            Apenas um profissional de saúde pode confirmar o diagnóstico.
           </p>
         </motion.div>
       </div>

@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLeishCheckStore } from '@/store/useLeishCheckStore';
 import { speakText } from '@/components/AudioToggle';
 import { questions } from '@/data/questions';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Check, X } from 'lucide-react';
 import AnimatedPage from '@/components/AnimatedPage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -45,21 +43,33 @@ export default function Questionnaire() {
   const dur = prefersReduced ? 0 : 0.3;
 
   return (
-    <AnimatedPage className="flex min-h-screen flex-col items-center px-4 py-8">
+    <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
       <div className="w-full max-w-md flex flex-col gap-6">
         <div className="flex items-center gap-3">
           <button
             onClick={handleBack}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-muted"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-muted/80 hover-lift"
             aria-label="Voltar para a pergunta anterior"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div className="flex-1">
-            <p className="text-sm font-medium text-muted-foreground">
-              Pergunta {currentQuestion + 1} de {questions.length}
-            </p>
-            <Progress value={progress} className="mt-1 h-2" />
+            <div className="flex items-center justify-between mb-1">
+              <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-primary text-primary-foreground text-xs font-bold">
+                {currentQuestion + 1}
+              </span>
+              <span className="text-xs text-muted-foreground">{questions.length} perguntas</span>
+            </div>
+            {/* Gradient progress bar */}
+            <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-muted">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ background: 'linear-gradient(90deg, hsl(152 56% 34%), hsl(152 38% 50%))' }}
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+              />
+            </div>
           </div>
         </div>
 
@@ -70,9 +80,11 @@ export default function Questionnaire() {
             animate={{ opacity: 1, x: 0 }}
             exit={prefersReduced ? undefined : { opacity: 0, x: -30 }}
             transition={{ duration: dur }}
-            className="flex flex-col items-center gap-6 rounded-2xl border border-border bg-card p-8 text-center shadow-sm"
+            className="glass-card flex flex-col items-center gap-6 p-8 text-center"
           >
-            <span className="text-5xl" role="img" aria-hidden="true">{q.icon}</span>
+            <div className="icon-circle h-16 w-16">
+              <span className="text-3xl" role="img" aria-hidden="true">{q.icon}</span>
+            </div>
             <p className="text-xl font-semibold leading-relaxed text-card-foreground">
               {q.text}
             </p>
@@ -80,25 +92,28 @@ export default function Questionnaire() {
         </AnimatePresence>
 
         <div className="flex gap-4">
-          <Button
+          <button
             onClick={() => handleAnswer(true)}
-            className={`h-16 flex-1 rounded-2xl text-xl font-bold shadow-md transition-all ${
-              currentAnswer?.answer === true ? 'ring-4 ring-primary/50' : ''
+            className={`flex h-16 flex-1 items-center justify-center gap-2 rounded-2xl text-xl font-bold transition-all hover-lift ${
+              currentAnswer?.answer === true
+                ? 'bg-success text-success-foreground ring-4 ring-success/30'
+                : 'glass-card text-success hover:bg-success/10'
             }`}
             aria-label="Sim"
           >
-            ✅ Sim
-          </Button>
-          <Button
+            <Check className="h-6 w-6" /> Sim
+          </button>
+          <button
             onClick={() => handleAnswer(false)}
-            variant="secondary"
-            className={`h-16 flex-1 rounded-2xl text-xl font-bold shadow-md transition-all ${
-              currentAnswer?.answer === false ? 'ring-4 ring-primary/50' : ''
+            className={`flex h-16 flex-1 items-center justify-center gap-2 rounded-2xl text-xl font-bold transition-all hover-lift ${
+              currentAnswer?.answer === false
+                ? 'bg-danger text-danger-foreground ring-4 ring-danger/30'
+                : 'glass-card text-danger hover:bg-danger/10'
             }`}
             aria-label="Não"
           >
-            ❌ Não
-          </Button>
+            <X className="h-6 w-6" /> Não
+          </button>
         </div>
       </div>
     </AnimatedPage>
