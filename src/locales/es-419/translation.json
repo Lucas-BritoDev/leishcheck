@@ -41,7 +41,8 @@
     "statePlaceholder": "Seleccione el estado"
   },
   "questionnaire": {
-    "questionOf": "preguntas",
+    "title": "Cuestionario",
+    "questionOf": "{{current}} de {{total}} preguntas",
     "q1": "¿Vive en una zona rural o boscosa?",
     "q2": "¿Ha viajado a lugares con casos de leishmaniasis?",
     "q3": "¿Tiene una lesión en la piel que no cicatriza?",
