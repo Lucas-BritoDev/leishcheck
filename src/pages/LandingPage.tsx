@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, MessageSquare, Globe, Wifi, WifiOff, Menu, X, ClipboardList, Camera, BarChart3, Quote, Download } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { useInstallApp } from '@/hooks/useInstallApp';
+import { useInstallApp, InstallAppModal } from '@/hooks/useInstallApp';
 import heroImage from '@/assets/hero-landing.jpg';
 
 /* ─── Counter Hook ─── */
@@ -52,7 +52,7 @@ export default function LandingPage() {
   const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isInstallable, handleInstall } = useInstallApp();
+  const { isInstallable, showModal, setShowModal, os, handleInstallClick, triggerNativeInstall, deferredPrompt } = useInstallApp();
 
   /* Parallax */
   const heroRef = useRef<HTMLDivElement>(null);
@@ -83,6 +83,14 @@ export default function LandingPage() {
 
   return (
     <div className="landing-page bg-[#F5F2EC] text-[#1C2B1E] overflow-x-hidden">
+      <InstallAppModal 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)}
+        os={os}
+        onNativeInstall={triggerNativeInstall}
+        hasNativePrompt={!!deferredPrompt}
+      />
+      
       {/* ═══ NAVBAR ═══ */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#1C2B1E]/90 backdrop-blur-lg shadow-lg' : 'bg-transparent'}`}>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-12">
@@ -99,7 +107,7 @@ export default function LandingPage() {
             ))}
             {isInstallable && (
               <button 
-                onClick={handleInstall} 
+                onClick={handleInstallClick} 
                 className={`flex items-center gap-2 border px-4 py-2 text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 ${scrolled ? 'border-[#A5D6A7] bg-[#A5D6A7]/10 text-[#A5D6A7]' : 'border-[#A5D6A7] bg-[#A5D6A7]/20 text-[#A5D6A7]'}`}
               >
                 <Download className="h-4 w-4" />
@@ -128,7 +136,7 @@ export default function LandingPage() {
               ))}
               {isInstallable && (
                 <button 
-                  onClick={handleInstall} 
+                  onClick={handleInstallClick} 
                   className="mt-4 flex items-center justify-center gap-2 border border-[#A5D6A7] bg-[#A5D6A7]/10 px-5 py-2.5 text-sm font-bold uppercase tracking-widest text-[#A5D6A7] hover:bg-[#A5D6A7]/20"
                 >
                   <Download className="h-4 w-4" />
