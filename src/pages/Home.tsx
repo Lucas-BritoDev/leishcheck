@@ -1,0 +1,67 @@
+import { useNavigate } from 'react-router-dom';
+import { useLeishCheckStore } from '@/store/useLeishCheckStore';
+import { speakText } from '@/components/AudioToggle';
+import { useEffect } from 'react';
+import { Heart, BookOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+export default function Home() {
+  const { audioEnabled, checkConsentValid } = useLeishCheckStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (audioEnabled) {
+      speakText('Bem-vindo ao LeishCheck. Cuide da sua saúde. Simples, rápido e gratuito. Toque em Iniciar Triagem para começar.');
+    }
+  }, [audioEnabled]);
+
+  const handleStart = () => {
+    if (checkConsentValid()) {
+      navigate('/dados');
+    } else {
+      navigate('/consentimento');
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center px-6 animate-fade-in">
+      <div className="flex flex-col items-center gap-8 text-center max-w-sm">
+        {/* Logo */}
+        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary shadow-lg">
+          <Heart className="h-12 w-12 text-primary-foreground" />
+        </div>
+
+        <div>
+          <h1 className="text-3xl font-bold text-primary">LeishCheck</h1>
+          <p className="mt-2 text-lg text-muted-foreground">
+            Cuide da sua saúde.<br />Simples, rápido e gratuito.
+          </p>
+        </div>
+
+        <div className="flex w-full flex-col gap-4">
+          <Button
+            onClick={handleStart}
+            className="h-14 w-full rounded-2xl text-lg font-semibold shadow-md"
+            aria-label="Iniciar triagem de leishmaniose"
+          >
+            🩺 Iniciar Triagem
+          </Button>
+
+          <Button
+            onClick={() => navigate('/educacao')}
+            variant="secondary"
+            className="h-14 w-full rounded-2xl text-lg font-semibold"
+            aria-label="Acessar material educativo"
+          >
+            <BookOpen className="mr-2 h-5 w-5" />
+            📚 Material Educativo
+          </Button>
+        </div>
+
+        <p className="text-xs text-muted-foreground">
+          Esta ferramenta não substitui consulta médica presencial.
+        </p>
+      </div>
+    </div>
+  );
+}

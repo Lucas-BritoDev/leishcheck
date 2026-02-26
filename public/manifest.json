@@ -1,0 +1,17 @@
+{
+  "name": "LeishCheck",
+  "short_name": "LeishCheck",
+  "description": "Triagem de risco para Leishmaniose Cutânea",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f7f5",
+  "theme_color": "#2E7D32",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
