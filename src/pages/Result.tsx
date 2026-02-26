@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useLeishCheckStore } from '@/store/useLeishCheckStore';
 import { speakText } from '@/components/AudioToggle';
 import { Button } from '@/components/ui/button';
-import { MapPin, BookOpen, RotateCcw, AlertTriangle, FileDown, ShieldCheck } from 'lucide-react';
+import { MapPin, BookOpen, RotateCcw, AlertTriangle, FileDown, ShieldCheck, Sparkles, Eye } from 'lucide-react';
 import AnimatedPage from '@/components/AnimatedPage';
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
 
 const CIRCLE_RADIUS = 70;
 const CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
@@ -86,6 +87,41 @@ export default function Result() {
           <hr className="my-4 border-border/30" />
           <p className="text-sm leading-relaxed text-muted-foreground">{t(`result.${result.level}Orientation`)}</p>
         </motion.div>
+
+        {/* AI Analysis Card */}
+        {result.aiAnalysis && (
+          <motion.div className="glass-card p-6 w-full" {...stagger(0.7)}>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                <Sparkles className="h-4 w-4 text-primary" />
+              </div>
+              <h3 className="text-sm font-bold text-card-foreground">{t('ai.cardTitle')}</h3>
+              <Badge variant="secondary" className="ml-auto text-xs">
+                {t('ai.confidence')}: {result.aiAnalysis.confidence}%
+              </Badge>
+            </div>
+
+            <p className="text-sm leading-relaxed text-muted-foreground mb-3">
+              {result.aiAnalysis.analysis}
+            </p>
+
+            {result.aiAnalysis.characteristics.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {result.aiAnalysis.characteristics.map((char, i) => (
+                  <span key={i} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+                    <Eye className="h-3 w-3" />
+                    {char}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="flex items-start gap-2 rounded-xl bg-muted/50 p-3">
+              <ShieldCheck className="h-4 w-4 text-warning shrink-0 mt-0.5" />
+              <p className="text-xs text-muted-foreground">{t('ai.disclaimer')}</p>
+            </div>
+          </motion.div>
+        )}
 
         <motion.div className="flex w-full flex-col gap-3" {...stagger(0.8)}>
           <button onClick={() => {

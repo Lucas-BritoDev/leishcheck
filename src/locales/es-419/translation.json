@@ -127,6 +127,13 @@
     "button": "Instalar",
     "dismiss": "Ahora no"
   },
+  "ai": {
+    "analyzing": "Analizando imagen con IA...",
+    "analysisFailed": "Análisis por IA no disponible. Resultado basado solo en el cuestionario.",
+    "cardTitle": "Análisis por Inteligencia Artificial",
+    "confidence": "Confianza",
+    "disclaimer": "Análisis asistido por IA — no sustituye el diagnóstico médico profesional."
+  },
   "audio": {
     "home": "Bienvenido a LeishCheck. Cuida tu salud. Simple, rápido y gratuito. Toca Iniciar Triaje para comenzar.",
     "consent": "Tu privacidad es importante. Por favor, lee el formulario de consentimiento a continuación y desplázate hasta el final para continuar.",
