@@ -207,14 +207,15 @@
   }
 }
 
-/* Reposition VLibras to bottom-right above audio button */
+/* Reposition VLibras to right side center */
 div[vw],
 div[vw].enabled {
   position: fixed !important;
-  bottom: 5rem !important;
-  right: 1rem !important;
+  top: 50% !important;
+  right: 0.5rem !important;
+  bottom: auto !important;
   left: auto !important;
-  top: auto !important;
+  transform: translateY(-50%) !important;
   z-index: 49 !important;
   width: auto !important;
   height: auto !important;

@@ -47,7 +47,7 @@ export function LanguageSelector() {
             />
             {/* Bottom sheet */}
             <motion.div
-              className="fixed bottom-0 left-0 right-0 z-[70] rounded-t-3xl border-t border-border/50 p-6 pb-8"
+              className="fixed bottom-0 left-1/2 z-[70] w-full max-w-md -translate-x-1/2 rounded-t-3xl border-t border-border/50 p-6 pb-8"
               style={{
                 background: 'hsl(var(--card))',
               }}
