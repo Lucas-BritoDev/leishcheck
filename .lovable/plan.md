@@ -1,122 +1,93 @@
 
 
-# LeishCheck — Triagem de Leishmaniose Cutânea (PWA)
+# Plano: Implementar os 8 Itens Pendentes do PRD
 
-Aplicativo progressivo (PWA) de triagem de risco para Leishmaniose Cutânea, com questionário clínico, upload de imagem, conteúdo educativo e modo áudio. Interface acessível para pessoas com baixa escolaridade em regiões endêmicas do Brasil.
+## 1. Termo de Consentimento (Seção 9.1 do PRD)
 
----
+**Arquivo:** `src/pages/Consent.tsx`
 
-## Fase 1 — Fundação: Design System e Estrutura
+Substituir o `CONSENT_TEXT` atual pelo texto exato da Seção 9.1 do PRD:
+- "Ao continuar, você concorda voluntariamente..."
+- Seções: OS DADOS UTILIZADOS INCLUEM, FINALIDADE, PRIVACIDADE E SEGURANÇA, SEUS DIREITOS, DECLARAÇÃO, IMPORTANTE
 
-### 1.1 Identidade Visual
-- Paleta de cores personalizada: verde primário (#2E7D32), verde claro (#A5D6A7), azul confiança (#1565C0), amarelo alerta (#FBC02D), vermelho perigo (#C62828)
-- Tipografia Poppins (Google Fonts) com escalas definidas (H1 28px bold, Body 16px, etc.)
-- Componentes base: botões arredondados (16px radius, min-height 48px), cards com sombra verde sutil, inputs com borda verde
+## 2. Perguntas de Triagem (Seção 9.2 do PRD)
 
-### 1.2 Estrutura de Rotas e Estado Global
-- Páginas: Home, Consent, UserData, Questionnaire, ImageUpload, Result, Education
-- Estado global com Zustand para gerenciar fluxo de triagem, respostas, modo áudio e preferências
-- Tipos TypeScript: Session, QuestionAnswer, RiskResult, UserData
+**Arquivo:** `src/data/questions.ts`
 
----
+Substituir as 10 perguntas atuais pelas exatas do PRD (Seção 9.2):
 
-## Fase 2 — Telas do Fluxo Principal
+| # | Ícone | Pergunta | Peso |
+|---|-------|----------|------|
+| Q01 | 🌿 | Você mora em área rural ou de mata? | 10 |
+| Q02 | 🌿 | Já viajou para locais com casos de leishmaniose? | 10 |
+| Q03 | 🩹 | Possui lesão na pele que não cicatriza? | 20 |
+| Q04 | 📈 | A lesão está crescendo com o tempo? | 15 |
+| Q05 | 🔍 | A lesão não dói e tem aspecto ulcerado? | 20 |
+| Q06 | 🐕 | Houve contato com animais infectados? | 10 |
+| Q07 | 🌿 | Mora em área endêmica? | 10 |
+| Q08 | 📋 | Já teve leishmaniose antes? | 10 |
+| Q09 | 📅 | A ferida tem mais de 2 semanas? | 15 |
+| Q10 | 🦟 | A lesão surgiu após picada de inseto? | 15 |
 
-### 2.1 Tela Inicial (Splash)
-- Logo LeishCheck com ícone de saúde em verde
-- Tagline: "Cuide da sua saúde. Simples, rápido e gratuito."
-- Botão primário grande "🩺 Iniciar Triagem"
-- Botão secundário "📚 Material Educativo"
-- Ícone flutuante de áudio (🔊) no canto superior direito
+Total: 135 pontos (mesmo valor, perguntas diferentes).
 
-### 2.2 Consentimento LGPD
-- Ícone de escudo no topo, título "Sua privacidade é importante"
-- Texto completo do termo de consentimento com scroll obrigatório
-- Checkbox "Li e concordo" habilitado só após rolar até o final
-- Botão "Aceitar e Continuar" (desabilitado até checkbox marcado)
-- Botão "Não aceito" com mensagem respeitosa
-- Aviso: "Esta ferramenta não substitui consulta médica presencial."
+## 3. Regra de Negócio #6 — Aviso de Emergência Antes do Resultado
 
-### 2.3 Dados Básicos
-- Campos: Idade, Gênero (select), Cidade, Estado
-- Todos opcionais exceto confirmação de localização
-- Interface simples com labels grandes
+**Arquivo:** `src/pages/Result.tsx`
 
-### 2.4 Questionário de Triagem (10 perguntas)
-- Uma pergunta por vez com ícone ilustrativo
-- Botões grandes "✅ Sim" e "❌ Não" com alto contraste
-- Barra de progresso visual ("Pergunta 3 de 10")
-- Botão "Voltar" para corrigir resposta anterior
-- Animação de transição suave entre perguntas
-- 10 perguntas com pesos definidos (total máximo: 135 pontos)
+Quando o risco for **alto** (>60%), exibir um alerta vermelho em destaque **antes** do círculo de porcentagem e de todo o conteúdo do resultado. Texto: "🚨 ATENÇÃO: Seus sinais são fortemente sugestivos. Procure uma Unidade Básica de Saúde (UBS) urgentemente. O tratamento é gratuito pelo SUS."
 
-### 2.5 Upload de Imagem
-- Opções: Câmera ou Galeria
-- Preview da imagem com "Usar esta foto" / "Tirar outra foto"
-- Opção "Pular esta etapa" (campo opcional)
-- Indicador de carregamento durante upload
+## 4. Texto das Orientações por Nível (Tabela 10.2 do PRD)
 
-### 2.6 Tela de Resultado
-- Círculo grande central com porcentagem de risco
-- Cores por nível: Verde (0-30%), Amarelo (31-60%), Vermelho (61-100%)
-- Título do resultado (ex: "RISCO ELEVADO")
-- Orientação em linguagem simples
-- Botões: "📍 Ver UBS mais próxima", "📚 Saiba mais", "🔄 Refazer Triagem"
-- Aviso fixo: "Apenas um profissional de saúde pode confirmar o diagnóstico."
+**Arquivo:** `src/store/useLeishCheckStore.ts`
 
----
+Ajustar as orientações do `calculateRisk` para os textos exatos da tabela 10.2:
+- Baixo: "Sinais pouco sugestivos. Monitorar. Procurar UBS se piorar."
+- Médio: "Sinais moderados. Recomendado consulta médica breve."
+- Alto: "Sinais fortemente sugestivos. Procure UBS urgentemente."
 
-## Fase 3 — Seção Educativa
+## 5. Service Worker com vite-plugin-pwa
 
-### 3.1 Conteúdo sobre o Mosquito-Palha
-- Imagens placeholder do vetor (Lutzomyia sp.) com texto explicativo simples
-- Botão de áudio para narração
+**Arquivos:** `vite.config.ts`, `src/main.tsx`
 
-### 3.2 Galeria de Lesões
-- Carrossel com 3 fases: Inicial (pápula), Ulcerada, Avançada
-- Texto simples abaixo de cada imagem
-- Botão de áudio por imagem
-- Aviso obrigatório ao final
+- Instalar `vite-plugin-pwa`
+- Configurar no `vite.config.ts` com `VitePWA({ registerType: 'autoUpdate', ... })` e manifest inline
+- Registrar o SW em `src/main.tsx`
+- Remover o `manifest.json` manual (será gerado pelo plugin)
 
----
+## 6. IndexedDB com Dexie.js
 
-## Fase 4 — Modo Áudio e Acessibilidade
+**Arquivos novos:** `src/lib/db.ts`
+**Arquivo editado:** `src/store/useLeishCheckStore.ts`
 
-### 4.1 Modo Áudio Global
-- Botão flutuante 🔊 visível em todas as telas (toggle global)
-- Implementação via Web Speech API (SpeechSynthesis) em pt-BR
-- Velocidade de fala lenta (rate: 0.8)
-- Pausar/retomar áudio a qualquer momento
-- Preferência salva no localStorage
+- Instalar `dexie`
+- Criar `src/lib/db.ts` com stores: `sessions`, `consent_log`, `user_preferences`
+- Atualizar o store para persistir sessões completas no IndexedDB ao calcular resultado
+- Manter Zustand persist com localStorage para estado de sessão ativa (consentimento e áudio), mas salvar sessões completas no IndexedDB
 
-### 4.2 Acessibilidade
-- Contraste WCAG AA (mínimo 4.5:1)
-- Áreas de toque mínimas 44x44px
-- ARIA labels em todos os botões com ícones
-- Alt text descritivo em todas as imagens
-- Respeitar prefers-reduced-motion
+## 7. prefers-reduced-motion
+
+**Arquivo:** `src/components/AnimatedPage.tsx`, `src/pages/Questionnaire.tsx`, `src/pages/Result.tsx`
+
+- Criar um hook `useReducedMotion()` que verifica `window.matchMedia('(prefers-reduced-motion: reduce)')`
+- Em `AnimatedPage`, desabilitar animações (duration: 0) quando reduzido
+- Em `Questionnaire` e `Result`, desabilitar as animações do framer-motion quando a preferência estiver ativa
+
+## 8. Botão "Não aceito" com Mensagem Respeitosa
+
+**Arquivo:** `src/pages/Consent.tsx`
+
+Ao clicar "Não aceito", em vez de simplesmente redirecionar para Home, exibir um dialog/card respeitoso com mensagem:
+- "Entendemos sua decisão. Sem o consentimento, não é possível realizar a triagem. Você pode voltar quando quiser."
+- Botão "Voltar ao Início"
+- Botão "Reconsiderar" para fechar o aviso
 
 ---
 
-## Fase 5 — Algoritmo de Risco e Persistência
+## Detalhes Técnicos
 
-### 5.1 Cálculo de Risco
-- Pesos por pergunta (Q1: 10pts, Q3: 20pts, Q5: 20pts, etc.)
-- Score normalizado: (pontos / 135) × 100
-- Classificação: Baixo (0-30%), Médio (31-60%), Alto (61-100%)
-- Orientações específicas por nível de risco
-
-### 5.2 Armazenamento Local
-- localStorage/IndexedDB para sessões, respostas, resultados e preferências
-- Consentimento armazenado por 90 dias (não solicitar novamente dentro do período)
-
----
-
-## Fase 6 — PWA e Offline
-
-### 6.1 Configuração PWA
-- Manifest com nome, ícones, cores tema (#2E7D32), orientação portrait
-- Service Worker para cache de assets estáticos
-- Prompt de instalação (Add to Home Screen) customizado
-- Funcionamento 100% offline após primeira carga
+- **Dependências a instalar:** `vite-plugin-pwa`, `dexie`
+- **Arquivos criados:** `src/lib/db.ts`, `src/hooks/useReducedMotion.ts`
+- **Arquivos editados:** `src/pages/Consent.tsx`, `src/data/questions.ts`, `src/store/useLeishCheckStore.ts`, `src/pages/Result.tsx`, `src/components/AnimatedPage.tsx`, `src/pages/Questionnaire.tsx`, `vite.config.ts`, `src/main.tsx`
+- **Arquivo removido:** `public/manifest.json` (gerenciado pelo vite-plugin-pwa)
 
