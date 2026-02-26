@@ -28,7 +28,7 @@ export default function History() {
   return (
     <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
       <div className="w-full max-w-md flex flex-col gap-6">
-        <PageHeader title={t('history.title')} icon={Clock} backTo="/" />
+        <PageHeader title={t('history.title')} icon={Clock} />
         {loading ? (
           <div className="flex justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>
         ) : sessions.length === 0 ? (

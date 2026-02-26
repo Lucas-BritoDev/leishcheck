@@ -32,7 +32,7 @@ export default function Questionnaire() {
     else navigate('/imagem');
   };
 
-  const handleBack = () => { if (currentQuestion > 0) prevQuestion(); else navigate('/dados'); };
+  const handleBack = () => { if (currentQuestion > 0) prevQuestion(); else navigate(-1); };
   const dur = prefersReduced ? 0 : 0.3;
 
   return (

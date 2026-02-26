@@ -148,7 +148,7 @@ export default function LandingPage() {
           </motion.p>
           <motion.button
             variants={fadeUp}
-            onClick={() => navigate('/consentimento')}
+            onClick={() => navigate('/app')}
             className="mt-4 border-2 border-white px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-white hover:text-[#1C2B1E]"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -329,7 +329,7 @@ export default function LandingPage() {
           </motion.h2>
           <motion.button
             variants={fadeUp}
-            onClick={() => navigate('/consentimento')}
+            onClick={() => navigate('/app')}
             className="mt-10 border-2 border-[#1C2B1E] px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-[#1C2B1E] transition-all hover:bg-[#1C2B1E] hover:text-[#F5F2EC]"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

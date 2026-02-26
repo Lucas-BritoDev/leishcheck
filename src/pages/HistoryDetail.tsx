@@ -43,7 +43,6 @@ export default function HistoryDetail() {
             title={t('history.detailTitle')}
             subtitle={`${date.toLocaleDateString('pt-BR')} às ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`}
             icon={ClipboardList}
-            backTo="/historico"
           />
         </motion.div>
 

@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLeishCheckStore } from '@/store/useLeishCheckStore';
 import { speakText } from '@/components/AudioToggle';
-import { Shield, ChevronDown, HeartHandshake, CheckCircle2, Eye } from 'lucide-react';
+import { Shield, ChevronDown, HeartHandshake, CheckCircle2, Eye, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import AnimatedPage from '@/components/AnimatedPage';
@@ -35,7 +35,10 @@ export default function Consent() {
     return (
       <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
         <div className="w-full max-w-md flex flex-col gap-6">
-          <PageHeader title={t('consent.title')} icon={Shield} backTo="/" />
+          <PageHeader 
+            title={t('consent.title')} 
+            icon={Shield} 
+          />
           <div className="glass-card flex flex-col items-center gap-5 p-8 text-center">
             <div className="icon-circle h-20 w-20">
               <CheckCircle2 className="h-10 w-10 text-primary" />
@@ -89,7 +92,11 @@ export default function Consent() {
     <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
       <div className="w-full max-w-md flex flex-col gap-6">
         
-        <PageHeader title={t('consent.title')} subtitle={t('consent.subtitle') !== 'consent.subtitle' ? t('consent.subtitle') : undefined} icon={Shield} backTo="/" />
+        <PageHeader 
+          title={t('consent.title')} 
+          subtitle={t('consent.subtitle') !== 'consent.subtitle' ? t('consent.subtitle') : undefined} 
+          icon={Shield} 
+        />
         <div ref={scrollRef} onScroll={handleScroll} className="glass-card h-64 overflow-y-auto p-5 text-sm leading-relaxed text-card-foreground">
           <pre className="whitespace-pre-wrap font-sans">{t('consent.term')}</pre>
         </div>

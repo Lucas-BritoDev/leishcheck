@@ -41,7 +41,7 @@ export default function Education() {
     <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
       <motion.div className="w-full max-w-md flex flex-col gap-6" variants={container} initial="hidden" animate="show">
         <motion.div variants={item}>
-          <PageHeader title={t('education.title')} icon={BookOpen} backTo="/" />
+          <PageHeader title={t('education.title')} icon={BookOpen} />
         </motion.div>
 
         <motion.div variants={item} className="glass-card p-6 border-l-4 border-l-primary">

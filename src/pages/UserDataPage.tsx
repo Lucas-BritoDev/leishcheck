@@ -31,7 +31,7 @@ export default function UserDataPage() {
   return (
     <AnimatedPage className="gradient-bg flex min-h-screen flex-col items-center px-4 py-8">
       <div className="w-full max-w-md flex flex-col gap-6">
-        <PageHeader title={t('userData.title')} subtitle={t('userData.optional')} icon={User} backTo="/consentimento" />
+        <PageHeader title={t('userData.title')} subtitle={t('userData.optional')} icon={User} />
         <div className="glass-card p-6 flex flex-col gap-5">
           <div className="space-y-2">
             <Label htmlFor="age" className="text-base font-medium flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" /> {t('userData.age')}</Label>

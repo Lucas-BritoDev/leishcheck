@@ -1,8 +1,10 @@
+import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
+import { stopSpeaking } from "@/components/AudioToggle";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { AudioToggle } from "@/components/AudioToggle";
 import { LanguageSelector } from "@/components/LanguageSelector";
@@ -26,18 +28,34 @@ const queryClient = new QueryClient();
 
 function AppShell() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isLanding = location.pathname === '/';
+  
+  // Track initial load (React strict mode may trigger twice, use a simple variable)
+  const isInitialMount = React.useRef(true);
+
+  React.useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      // If the app is reloaded (F5) and it's not the landing page, redirect to landing
+      // This is a requirement to reset the flow on refresh. Let's redirect if it's not /app either.
+      if (location.pathname !== '/' && location.pathname !== '/app') {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [location.pathname, navigate]);
+
+  React.useEffect(() => {
+    // Stop audio whenever the route changes
+    stopSpeaking();
+  }, [location.pathname]);
 
   return (
     <>
-      {!isLanding && (
-        <>
-          <OfflineBanner />
-          <DarkModeToggle />
-          <AudioToggle />
-          <LanguageSelector />
-        </>
-      )}
+      <OfflineBanner />
+      <DarkModeToggle />
+      <AudioToggle />
+      <LanguageSelector />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LandingPage />} />
@@ -53,12 +71,8 @@ function AppShell() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
-      {!isLanding && (
-        <>
-          <VLibrasWidget />
-          <InstallPrompt />
-        </>
-      )}
+      <VLibrasWidget />
+      <InstallPrompt />
     </>
   );
 }

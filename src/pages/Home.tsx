@@ -35,15 +35,24 @@ export default function Home() {
       <motion.div className="flex flex-col items-center gap-10 text-center max-w-sm" variants={container} initial="hidden" animate="show">
         <motion.div
           variants={item}
-          className="relative flex h-32 w-32 items-center justify-center rounded-3xl overflow-hidden"
-          style={{ boxShadow: '0 0 40px hsl(152 56% 34% / 0.3), 0 0 80px hsl(152 56% 34% / 0.1)' }}
+          onClick={() => navigate('/')}
+          className="relative flex h-28 w-28 items-center justify-center cursor-pointer hover-lift bg-white rounded-3xl shadow-md p-1 overflow-hidden border border-black/5"
+          aria-label={t('nav.backToHome')}
         >
-          <img src={logoLeishCheck} alt="Logo LeishCheck" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 rounded-3xl ring-2 ring-primary/20" />
+          <img 
+            src={logoLeishCheck} 
+            alt="Logo LeishCheck" 
+            className="h-full w-full object-contain" 
+          />
         </motion.div>
 
         <motion.div variants={item} className="flex flex-col items-center gap-3">
-          <h1 className="text-4xl font-bold text-gradient tracking-tight">{t('app.name')}</h1>
+          <h1 
+             className="text-4xl font-bold text-gradient tracking-tight cursor-pointer hover:opacity-80 transition-opacity"
+             onClick={() => navigate('/')}
+          >
+            {t('app.name')}
+          </h1>
           <span className="inline-block rounded-full border border-primary/20 bg-primary/5 px-3 py-0.5 text-xs font-medium text-primary/70">{t('app.version')}</span>
           <p className="mt-1 text-base leading-relaxed text-muted-foreground whitespace-pre-line max-w-[280px]">{t('app.tagline')}</p>
         </motion.div>
