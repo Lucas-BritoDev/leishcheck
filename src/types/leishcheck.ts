@@ -19,6 +19,13 @@ export interface Question {
 
 export type RiskLevel = 'low' | 'medium' | 'high';
 
+export interface AIAnalysis {
+  riskAdjustment: number;  // -20 to +30
+  confidence: number;      // 0-100
+  characteristics: string[];
+  analysis: string;
+}
+
 export interface RiskResult {
   score: number;
   percentage: number;
@@ -26,6 +33,7 @@ export interface RiskResult {
   title: string;
   description: string;
   orientation: string;
+  aiAnalysis?: AIAnalysis;
 }
 
 export interface Session {

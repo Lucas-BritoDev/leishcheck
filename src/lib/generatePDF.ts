@@ -253,6 +253,62 @@ export function generateResultPDF(
 
   y += 6;
 
+  // ─── AI ANALYSIS ───
+  if (result.aiAnalysis) {
+    y = checkPage(doc, y, 50);
+    // Section header
+    doc.setFillColor(100, 60, 180);
+    doc.roundedRect(MARGIN, y, CONTENT_W, 7, 2, 2, 'F');
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.text('ANÁLISE POR INTELIGÊNCIA ARTIFICIAL', MARGIN + 6, y + 5);
+    y += 12;
+
+    // Confidence badge
+    const confText = `Confiança: ${result.aiAnalysis.confidence}%`;
+    const confW = doc.getTextWidth(confText) + 10;
+    doc.setFillColor(237, 233, 254);
+    doc.roundedRect(MARGIN, y - 3.5, confW, 7, 3, 3, 'F');
+    doc.setTextColor(100, 60, 180);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text(confText, MARGIN + 5, y + 1);
+    y += 10;
+
+    // Analysis text
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    const analysisLines = doc.splitTextToSize(result.aiAnalysis.analysis, CONTENT_W - 4);
+    doc.text(analysisLines, MARGIN + 2, y);
+    y += analysisLines.length * 4.5 + 4;
+
+    // Characteristics
+    if (result.aiAnalysis.characteristics.length > 0) {
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(80, 80, 80);
+      doc.text('Achados visuais:', MARGIN + 2, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      result.aiAnalysis.characteristics.forEach((char) => {
+        y = checkPage(doc, y, 6);
+        doc.text(`• ${char}`, MARGIN + 4, y);
+        y += 5;
+      });
+    }
+
+    y += 4;
+    // AI disclaimer
+    doc.setFillColor(237, 233, 254);
+    doc.roundedRect(MARGIN, y, CONTENT_W, 10, 3, 3, 'F');
+    doc.setFontSize(7);
+    doc.setTextColor(100, 60, 180);
+    doc.text('⚠ Análise assistida por IA — não substitui diagnóstico médico profissional.', MARGIN + 4, y + 6);
+    y += 16;
+  }
+
   // ─── DISCLAIMER ───
   y = checkPage(doc, y, 28);
   // Warning box

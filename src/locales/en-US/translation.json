@@ -127,6 +127,13 @@
     "button": "Install",
     "dismiss": "Not now"
   },
+  "ai": {
+    "analyzing": "Analyzing image with AI...",
+    "analysisFailed": "AI analysis unavailable. Result based on questionnaire only.",
+    "cardTitle": "AI-Powered Analysis",
+    "confidence": "Confidence",
+    "disclaimer": "AI-assisted analysis — does not replace professional medical diagnosis."
+  },
   "audio": {
     "home": "Welcome to LeishCheck. Take care of your health. Simple, fast and free. Tap Start Screening to begin.",
     "consent": "Your privacy matters. Please read the consent form below and scroll to the end to continue.",

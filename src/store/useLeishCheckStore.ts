@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { UserData, QuestionAnswer, RiskResult, RiskLevel } from '@/types/leishcheck';
+import { UserData, QuestionAnswer, RiskResult, RiskLevel, AIAnalysis } from '@/types/leishcheck';
 import { questions, MAX_SCORE } from '@/data/questions';
 import { saveSession } from '@/lib/db';
 
@@ -37,19 +37,24 @@ interface LeishCheckState {
 
   // Result
   result: RiskResult | null;
-  calculateResult: () => RiskResult;
+  calculateResult: (aiAnalysis?: AIAnalysis) => RiskResult;
 
   // Reset
   resetTriagem: () => void;
 }
 
-function calculateRisk(answers: QuestionAnswer[]): RiskResult {
+function calculateRisk(answers: QuestionAnswer[], aiAnalysis?: AIAnalysis): RiskResult {
   const score = answers.reduce((sum, a) => {
     if (a.answer) return sum + questions[a.questionIndex].weight;
     return sum;
   }, 0);
 
-  const percentage = Math.round((score / MAX_SCORE) * 100);
+  let percentage = Math.round((score / MAX_SCORE) * 100);
+
+  // Apply AI adjustment if available
+  if (aiAnalysis) {
+    percentage = Math.max(0, Math.min(100, percentage + aiAnalysis.riskAdjustment));
+  }
 
   let level: RiskLevel;
   let title: string;
@@ -73,7 +78,7 @@ function calculateRisk(answers: QuestionAnswer[]): RiskResult {
     orientation = 'Sinais fortemente sugestivos. Procure UBS urgentemente.';
   }
 
-  return { score, percentage, level, title, description, orientation };
+  return { score, percentage, level, title, description, orientation, aiAnalysis };
 }
 
 function applyDarkClass(dark: boolean) {
@@ -127,9 +132,9 @@ export const useLeishCheckStore = create<LeishCheckState>()(
       setImage: (base64) => set({ imageBase64: base64 }),
 
       result: null,
-      calculateResult: () => {
+      calculateResult: (aiAnalysis?: AIAnalysis) => {
         const state = get();
-        const result = calculateRisk(state.answers);
+        const result = calculateRisk(state.answers, aiAnalysis);
         set({ result });
 
         saveSession({
