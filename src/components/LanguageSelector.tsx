@@ -9,7 +9,12 @@ const LANGUAGES = [
   { code: 'es-419', flag: '🇪🇸', label: 'Español (América Latina)' },
 ];
 
-export function LanguageSelector() {
+interface LanguageSelectorProps {
+  className?: string;
+  variant?: 'fixed' | 'inline';
+}
+
+export function LanguageSelector({ className = '', variant = 'fixed' }: LanguageSelectorProps) {
   const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -19,19 +24,31 @@ export function LanguageSelector() {
     setOpen(false);
   };
 
+  const baseClasses = "flex items-center justify-center transition-all hover:scale-110 active:scale-95";
+  
+  const variantClasses = variant === 'fixed' 
+    ? "h-10 w-10 rounded-full border border-border/50 shadow-lg"
+    : "h-10 w-10 rounded-xl border border-border/30 hover:border-border/60 hover:bg-muted/50";
+
+  const variantStyles = variant === 'fixed' 
+    ? {
+        background: 'hsl(var(--card) / 0.85)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+      }
+    : {
+        background: 'hsl(var(--muted) / 0.3)',
+      };
+
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 left-[4.5rem] z-50 flex h-12 w-12 items-center justify-center rounded-full border border-border/50 shadow-lg transition-all hover:scale-110 active:scale-95"
-        style={{
-          background: 'hsl(var(--card) / 0.85)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-        }}
+        className={`${baseClasses} ${variantClasses} ${className}`}
+        style={variantStyles}
         aria-label="Idioma / Language / Idioma"
       >
-        <Globe className="h-5 w-5 text-primary" />
+        <Globe className={`${variant === 'fixed' ? 'h-5 w-5' : 'h-5 w-5'} text-primary`} />
       </button>
 
       <AnimatePresence>

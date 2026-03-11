@@ -6,9 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { AudioToggle } from "@/components/AudioToggle";
-import { LanguageSelector } from "@/components/LanguageSelector";
-import { DarkModeToggle } from "@/components/DarkModeToggle";
+import { SettingsToggle } from "@/components/SettingsToggle";
+import { FloatingPWAButton } from "@/components/FloatingPWAButton";
 import { VLibrasWidget } from "@/components/VLibrasWidget";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { InstallPrompt } from "@/components/InstallPrompt";
@@ -53,9 +52,13 @@ function AppShell() {
   return (
     <>
       <OfflineBanner />
-      <DarkModeToggle />
-      <AudioToggle />
-      <LanguageSelector />
+      
+      {/* Settings toggle and back button - appear on all pages except landing page */}
+      {!isLanding && <SettingsToggle />}
+      
+      {/* Floating PWA install button - appears on all pages */}
+      <FloatingPWAButton />
+      
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<LandingPage />} />

@@ -1,24 +1,41 @@
 import { Moon, Sun } from 'lucide-react';
 import { useLeishCheckStore } from '@/store/useLeishCheckStore';
 
-export function DarkModeToggle() {
+interface DarkModeToggleProps {
+  className?: string;
+  variant?: 'fixed' | 'inline';
+}
+
+export function DarkModeToggle({ className = '', variant = 'fixed' }: DarkModeToggleProps) {
   const { darkMode, toggleDarkMode } = useLeishCheckStore();
+
+  const baseClasses = "flex items-center justify-center transition-all hover:scale-110 active:scale-95";
+  
+  const variantClasses = variant === 'fixed' 
+    ? "h-10 w-10 rounded-full border border-border/50 shadow-lg"
+    : "h-10 w-10 rounded-xl border border-border/30 hover:border-border/60 hover:bg-muted/50";
+
+  const variantStyles = variant === 'fixed' 
+    ? {
+        background: 'hsl(var(--card) / 0.85)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+      }
+    : {
+        background: 'hsl(var(--muted) / 0.3)',
+      };
 
   return (
     <button
       onClick={toggleDarkMode}
-      className="fixed bottom-4 left-4 z-50 flex h-12 w-12 items-center justify-center rounded-full border border-border/50 shadow-lg transition-all hover:scale-110 active:scale-95"
-      style={{
-        background: 'hsl(var(--card) / 0.85)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-      }}
+      className={`${baseClasses} ${variantClasses} ${className}`}
+      style={variantStyles}
       aria-label={darkMode ? 'Light mode' : 'Dark mode'}
     >
       {darkMode ? (
-        <Sun className="h-5 w-5 text-warning" />
+        <Sun className={`${variant === 'fixed' ? 'h-5 w-5' : 'h-5 w-5'} text-warning`} />
       ) : (
-        <Moon className="h-5 w-5 text-muted-foreground" />
+        <Moon className={`${variant === 'fixed' ? 'h-5 w-5' : 'h-5 w-5'} text-foreground`} />
       )}
     </button>
   );
