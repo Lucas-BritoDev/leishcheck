@@ -52,12 +52,7 @@ export default defineConfig(({ mode }) => ({
             handler: "CacheFirst",
             options: { 
               cacheName: "leish-ai-models", 
-              expiration: { maxEntries: 5, maxAgeSeconds: 60 * 60 * 24 * 30 },
-              cacheKeyWillBeUsed: async ({ request }) => {
-                // Cache by model version in URL
-                const url = new URL(request.url);
-                return `${url.origin}${url.pathname}`;
-              }
+              expiration: { maxEntries: 5, maxAgeSeconds: 60 * 60 * 24 * 30 }
             },
           },
         ],
